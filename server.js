@@ -22,7 +22,7 @@ const port =5000
 //     credentials: true,
 // }));
 app.use(cors({
-    origin: 'https://auto-frontend-8idj-moidheen-suhairs-projects.vercel.app/', 
+    origin: 'https://auto-frontend-8idj-moidheen-suhairs-projects.vercel.app', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
