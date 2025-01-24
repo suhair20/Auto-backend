@@ -16,16 +16,16 @@ connectDB()
 const app=express()
 const port =5000
 
-// app.use(cors({
-//     origin: 'http://localhost:5173', 
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     credentials: true,
-// }));
 app.use(cors({
-    origin: 'https://auto-frontend-8idj-moidheen-suhairs-projects.vercel.app', 
+    origin: 'http://localhost:5173', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
+// app.use(cors({
+//     origin: 'https://auto-frontend-8idj-moidheen-suhairs-projects.vercel.app', 
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true,
+// }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

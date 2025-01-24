@@ -16,9 +16,13 @@ class Otpverifying{
      }
 
   console.log("heloo");
-     await this.userRepository.updateUserVerificationStatus(email, true);
-
+    const updateuser= await this.userRepository.updateUserVerificationStatus(email, true);
+  console.log('heloobba');
+  
      this.otpService.deleteOtp(email)
+     console.log('vannuu');
+     return updateuser
+     
     }
 }
 export default Otpverifying

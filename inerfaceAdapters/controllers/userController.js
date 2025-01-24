@@ -55,7 +55,11 @@ class UserController {
             console.log("yvide");
             console.log(req.body);
             const result=await this.otpverifying.excute(email,otp)
-            res.status(201).json({ message: 'user created', result });
+            console.log('result',result);
+            
+            console.log('About to send response to frontend');
+            res.status(200).json({ message: 'user created', result });
+            console.log('Response sent successfully');
         } catch (error) {
             console.log(error);
             next(error); 

@@ -2,14 +2,15 @@ import { createClient } from 'redis';
 import { Redis } from '@upstash/redis';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
+import { log } from 'console';
 
 class OTP {
     constructor() {
         this.redisClient = new Redis({
-            url: 'https://hip-ringtail-24466.upstash.io', // Replace with your Upstash Redis URL
-            token: 'AV-SAAIjcDFiMzk2Yjk0ZTZkZDE0OWViYWExYzlmMzQ4NWUyNDAwZXAxMA', // Replace with your Upstash token
+            url: 'https://eminent-wahoo-31585.upstash.io',
+            token:'AXthAAIjcDFiYTcwNjRmMzU3YzQ0Njg5OTZhYzAyYzIxMzgyYWY4N3AxMA',// Replace with your Upstash token
         });
-
+        
        
     }
 
@@ -19,12 +20,18 @@ class OTP {
 
     async sendOtp(email) {
         try {
+            console.log('heloo');
+            
             const otp = this.generateOtp();
            console.log('oyy')
             
 
             // Store OTP in Redis with an expiration time of 60 seconds
+            console.log("redi");
+            
             await this.redisClient.set(`otp:${email}`, otp, { ex: 60 });
+            console.log('redis okey');
+            
 
             const transporter = nodemailer.createTransport({
                 service: 'gmail',

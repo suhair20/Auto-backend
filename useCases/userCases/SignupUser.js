@@ -10,11 +10,23 @@ class SignupUser{
 
     async execute(name,password,email){  
         
-        console.log(password);
+        
         const existingUser=await this.userRepository.findByemail(email)
+
         if(existingUser){
+        if(!existingUser.isVerified){
+            existingUser.name=name
+            existingUser.password= await this.PasswordService.hashaPassword(password)
+            await this.userRepository.save(existingUser)
+            return existingUser
+        }else{
             throw new Error('User already exists');
         }
+
+    }
+
+
+    
     const hashPassword=await this.PasswordService.hashaPassword(password)
     
        const user = new User(name,email,hashPassword)
