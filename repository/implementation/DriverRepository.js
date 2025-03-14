@@ -54,6 +54,22 @@ class DriverRepository extends UserInterface{
             console.log(error);
         }
     }
+
+    async updatelocation(driverId,location){
+        try {
+           
+            console.log("Driver ID:", driverId);
+            console.log("New Location:", location);
+            return await DriverModel.findByIdAndUpdate(driverId,{location},{new:true});
+        } catch (error) {
+            console.log(error);  
+        }
+       
+    }
+
+    async findById(userId) {
+        return await UserModel.findById(userId).select("-password");
+    }
 }
 
 export default DriverRepository

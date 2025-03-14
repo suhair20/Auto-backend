@@ -41,6 +41,10 @@ class userRepository extends UserInterface{
             console.log(error.message)
         }
     }
+
+    async findById(userId) {
+        return await UserModel.findById(userId).select("-password");
+    }
 }
 
 export default userRepository

@@ -15,9 +15,15 @@ const driverSchema = new mongoose.Schema({
     Licenceimage:{type:String,default:''},
     isVerified: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
-    isFullyRegistered: { type: Boolean, default: false } 
-});
+    isFullyRegistered: { type: Boolean, default: false } ,
 
+  location:{
+    type:{type:String,enum:['Point'],default:'Point'},
+    coordinates:{type:[Number],default:[0,0]}
+  }
+
+});
+driverSchema.index({ location: '2dsphere' });
 export default mongoose.model('Driver', driverSchema);
 
 

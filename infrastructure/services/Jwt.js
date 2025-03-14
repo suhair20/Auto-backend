@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 class Jwt{
-    constructor(secret=process.env.JWT_TOKEN,expiresIn='1h'){
+    constructor(secret=process.env.JWT_TOKEN,expiresIn='24h'){
         this.secret=secret,
         this.expiresIn=expiresIn
     }
@@ -15,10 +15,13 @@ class Jwt{
 
     verifyToken(token){
         try {
-
+         console.log("tioken",token);
+         
             return jwt.verify(token,this.secret)
             
         } catch (error) {
+            console.log(error);
+            
             throw new error('Token verifiction failed')
         }
     }

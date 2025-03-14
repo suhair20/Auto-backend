@@ -7,6 +7,7 @@ import OtpService from '../../infrastructure/services/OTP.js'
 import Otpverifying from '../../useCases/userCases/OtpVerifying.js'
 import Resendotp from '../../useCases/userCases/Resendotp.js'
 import LoginUser from '../../useCases/userCases/LoginUser.js'
+import { trusted } from 'mongoose'
 
 
 class UserController {
@@ -86,18 +87,40 @@ class UserController {
  login= async(req,res,next)=>{
     try {
         const {email,password}=req.body
-        const Token =await this.loginuser.excute(email,password)
+        const {Token,User} =await this.loginuser.excute(email,password)
+        console.log(Token);
+        
         res.cookie('token',Token,{
             httpOnly:true,
             secure: process.env.NODE_ENV === 'production', 
             sameSite:'strict',
             maxAge: 24 * 60 * 60 * 1000, 
         })
-        res.status(201).json({ success: true, Token });
+        res.status(201).json({ success: true, User });
     } catch (error) {
         console.log(error);
         res.status(400).json({ success: false, message: error.message })
         next(error)
+    }
+ }
+
+ checkAuth=async(req,res)=>{
+    try {
+         console.log(" authhhhhhh:: ",req.user);
+         
+        console.log('Auth sucess')
+        res.json({success:true,user:req.user})
+    } catch (error) {
+        
+    }
+ }
+
+ logout=async(req,res)=>{
+    try {
+        res.clearCookie("token", { httpOnly: true, secure: true, sameSite: 'None' }); 
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Logout failed" });
     }
  }
 

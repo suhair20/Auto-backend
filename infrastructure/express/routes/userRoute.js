@@ -7,7 +7,7 @@ import UserRepository from '../../../repository/implementation/UserRepository.js
 import Otpverifying from '../../../useCases/userCases/OtpVerifying.js'
 import OtpService from '../../services/OTP.js'
 import LoginUser from '../../../useCases/userCases/LoginUser.js'
-
+import userAuthMiddleware from '../Middelware/userAuthMiddleware.js'
 
 const userRoute = express.Router();
 
@@ -23,5 +23,7 @@ userRoute.post('/register', userController.signup);
 userRoute.post('/verify-otp',userController.verifyOtp)
 userRoute.post('/resend-otp',userController.resendingOtp)
 userRoute.post('/login',userController.login)
+userRoute.get('/checkAuth',userAuthMiddleware,userController.checkAuth )
+userRoute.post('/logout',userController.logout)
 
 export default userRoute;

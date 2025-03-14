@@ -10,6 +10,7 @@ class SignupDriver{
     }
     async execute(password,email){
       console.log('email',email);
+      console.log("Available Metthods:", Object.getOwnPropertyNames(Object.getPrototypeOf(this.driverRepository)));
               const existingUser=await this.driverRepository.findByemail(email)
         if(existingUser){
             throw new Error('User already exists')

@@ -11,15 +11,15 @@ import Jwt from '../../infrastructure/services/Jwt.js'
     }
     async excute(email,password){
         try {
-            const existingUser=await this.userRepository.findByemail(email)
-            if(!existingUser){
+            const User=await this.userRepository.findByemail(email)
+            if(!User){
                 throw new Error('User does not exist');
             }
-            console.log(existingUser);
-          const isPasswordValid=await this.passwordServices.comparePassword(password,existingUser.password)
+            console.log(User);
+          const isPasswordValid=await this.passwordServices.comparePassword(password,User.password)
           if (isPasswordValid){
-            const Token=await this.jwtToken.genrateToken({id:existingUser.id,email:existingUser.email});
-            return Token
+            const Token=await this.jwtToken.genrateToken({id:User.id,email:User.email});
+            return {Token,User}
           }else{
             throw new Error('Invalid password')
           }

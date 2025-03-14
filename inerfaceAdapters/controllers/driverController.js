@@ -3,6 +3,9 @@ import OtpService from "../../infrastructure/services/OTP.js"
 import Otpverifying from "../../useCases/Drivercase/OtpVerifying.js";
 import Resendotp from "../../useCases/Drivercase/Resendotp.js";
 import Verification from "../../useCases/Drivercase/Verification.js";
+import LoginDriver from "../../useCases/Drivercase/LoginDriver.js";
+
+import { log } from "console";
 
 
 class DriverController{
@@ -11,6 +14,7 @@ class DriverController{
     otpverifying=new Otpverifying(),
     resendotp=new Resendotp(),
     verification = new Verification(),
+    loginDriver=new LoginDriver()
    
     
 ){
@@ -19,6 +23,7 @@ class DriverController{
        this.otpverifying=otpverifying
        this.resendotp=resendotp
        this.Verification = verification
+       this.loginDriver=loginDriver
       
       
     }
@@ -27,6 +32,7 @@ class DriverController{
         try {
         
              
+            console.log('vanuuuuu');
             
              const {  password,email } = req.body;
              
@@ -96,6 +102,38 @@ class DriverController{
         }
     }
 
+    login =async (req,res,next)=>{
+        try {
+            
+       
+        const  {email,password}=req.body
+        const {driverToken,User}=await this.loginDriver.excute(email,password)
+        res.cookie('driverToken',driverToken,{
+            httpOnly:true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite:'strict',
+            maxAge: 24 * 60 * 60 * 1000, 
+        })
+        res.status(201).json({ success: true, User });
+    } catch (error) {
+            console.log(error);
+            
+    }
+
+    }
+
+
+    checkAuth=async()=>{
+        try {
+            console.log(" driverAuth:: ",req.driver);
+            
+           console.log('Auth driversucess')
+           res.json({success:true,driver:req.driver})
+       } catch (error) {
+           console.log(error);
+           
+       }
+    }
 
 
 }

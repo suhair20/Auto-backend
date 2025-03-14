@@ -6,6 +6,9 @@ class DriverInterface{
     async save(user){
         throw new Error('Method not implemented')
     }
+    updatelocation(driverId, location) {
+        throw new Error("Method 'updatelocation' must be implemented.");
+    }
 }
 
 export default DriverInterface
