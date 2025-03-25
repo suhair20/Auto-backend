@@ -28,7 +28,7 @@ class DriverController{
       
     }
 
-    signup= async(req,res)=>{
+    signup= async(req,res,next)=>{
         try {
         
              
@@ -42,7 +42,8 @@ class DriverController{
              res.status(201).json({ success: true, user });
 
         }catch (error) {
-            console.log(error);
+            res.status(400).json({ success: false, message: error.message })
+            next(error)
         }
     }
 
@@ -97,8 +98,8 @@ class DriverController{
            res.status(201).json({ message: 'user created' });
          }
         } catch (error) {
+            res.status(400).json({ success: false, message: error.message })
             next(error)
-            console.log(error);
         }
     }
 
@@ -117,7 +118,8 @@ class DriverController{
         res.status(201).json({ success: true, User });
     } catch (error) {
             console.log(error);
-            
+            res.status(400).json({ success: false, message: error.message })
+            next(error)
     }
 
     }
