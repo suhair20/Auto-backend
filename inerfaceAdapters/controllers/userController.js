@@ -8,7 +8,13 @@ import Otpverifying from '../../useCases/userCases/OtpVerifying.js'
 import Resendotp from '../../useCases/userCases/Resendotp.js'
 import LoginUser from '../../useCases/userCases/LoginUser.js'
 import { trusted } from 'mongoose'
+import Razorpay from 'razorpay'
 
+
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPA_KEY_ID,
+    key_secret: process.env.RAZORPAY_SECRET,
+  });
 
 class UserController {
     constructor(userRepository=new UserRepository(),
@@ -89,7 +95,7 @@ class UserController {
         const {email,password}=req.body
         const {Token,User} =await this.loginuser.excute(email,password)
         console.log(Token);
-        
+        res.clearCookie("driverToken", { path: "/driver" });
         res.cookie('token',Token,{
             httpOnly:true,
             secure: process.env.NODE_ENV === 'production', 
@@ -121,6 +127,44 @@ class UserController {
         return res.status(200).json({ success: true, message: "Logged out successfully" });
     } catch (error) {
         return res.status(500).json({ success: false, message: "Logout failed" });
+    }
+ }
+
+ createOrder=async(req,res)=>{
+    try {
+
+        console.log("creteordeback");
+        const { amount } = req.body;
+   console.log(amount);
+   
+        if (!amount) {
+          return res.status(400).json({ error: 'Amount is required' });
+        }
+
+
+         
+    const order = await razorpay.orders.create({
+      amount: amount*100,
+      currency: 'INR',
+      receipt: 'receipt_' + Math.random().toString(36).slice(2),
+    });
+console.log("order",order);
+
+    res.json(order);
+
+        
+    } catch (error) {
+        console.error('Order creation failed:', error);
+    res.status(500).json({ error: 'Failed to create order' });
+    }
+ }
+
+
+ verifypayment=async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        res.status(500).json({error:'failed in verifypayment  '})
     }
  }
 

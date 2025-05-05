@@ -58,8 +58,7 @@ class DriverRepository extends UserInterface{
     async updatelocation(driverId,location){
         try {
            
-            console.log("Driver ID:", driverId);
-            console.log("New Location:", location);
+            
             return await DriverModel.findByIdAndUpdate(driverId,{location},{new:true});
         } catch (error) {
             console.log(error);  
@@ -68,7 +67,7 @@ class DriverRepository extends UserInterface{
     }
 
     async findById(userId) {
-        return await UserModel.findById(userId).select("-password");
+        return await DriverModel.findById(userId).select("-password");
     }
 }
 

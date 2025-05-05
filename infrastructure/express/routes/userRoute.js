@@ -25,5 +25,7 @@ userRoute.post('/resend-otp',userController.resendingOtp)
 userRoute.post('/login',userController.login)
 userRoute.get('/checkAuth',userAuthMiddleware,userController.checkAuth )
 userRoute.post('/logout',userController.logout)
+userRoute.post('/createOrder',userController.createOrder)
+userRoute.post('/verifypayment'userController.verifypayment)
 
 export default userRoute;

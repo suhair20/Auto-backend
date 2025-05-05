@@ -4,8 +4,10 @@ import Otpverifying from "../../useCases/Drivercase/OtpVerifying.js";
 import Resendotp from "../../useCases/Drivercase/Resendotp.js";
 import Verification from "../../useCases/Drivercase/Verification.js";
 import LoginDriver from "../../useCases/Drivercase/LoginDriver.js";
+import driverDeatials from "../../useCases/Drivercase/driverDeatials.js";
 
 import { log } from "console";
+
 
 
 class DriverController{
@@ -14,8 +16,8 @@ class DriverController{
     otpverifying=new Otpverifying(),
     resendotp=new Resendotp(),
     verification = new Verification(),
-    loginDriver=new LoginDriver()
-   
+    loginDriver=new LoginDriver(),
+    DriverDeatials= new driverDeatials 
     
 ){
        this.signupDriver=signupDriver
@@ -24,7 +26,7 @@ class DriverController{
        this.resendotp=resendotp
        this.Verification = verification
        this.loginDriver=loginDriver
-      
+       this.DriverDeatials=DriverDeatials
       
     }
 
@@ -109,6 +111,7 @@ class DriverController{
        
         const  {email,password}=req.body
         const {driverToken,User}=await this.loginDriver.excute(email,password)
+        res.clearCookie("token", { path: "/" });
         res.cookie('driverToken',driverToken,{
             httpOnly:true,
             secure: process.env.NODE_ENV === 'production', 
@@ -125,7 +128,7 @@ class DriverController{
     }
 
 
-    checkAuth=async()=>{
+    checkAuth=async(req,res)=>{
         try {
             console.log(" driverAuth:: ",req.driver);
             
@@ -136,6 +139,30 @@ class DriverController{
            
        }
     }
+
+    logout=async(req,res)=>{
+        try {
+            res.clearCookie("token", { httpOnly: true, secure: true, sameSite: 'None' }); 
+            return res.status(200).json({ success: true, message: "Logged out successfully" });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Logout failed" });
+        }
+     }
+
+     getdriverdetials=async(req,res)=>{
+        try {
+        const driverId=req.params.id
+        console.log("id",driverId);
+        
+       const driver= await this.DriverDeatials.execute(driverId)
+       console.log(driver);
+       
+       res.status(201).json(driver);
+            
+        } catch (error) {
+            return res.status(500).json({ success: false, message: " failed" });
+        }
+     }
 
 
 }

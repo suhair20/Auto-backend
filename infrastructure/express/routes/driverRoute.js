@@ -16,4 +16,6 @@ adminRoute.post('/resendotp',driverController.resendingOtp)
 adminRoute.post('/verification', upload.array('image'), driverController.verification);
 adminRoute.post('/login',driverController.login)
 adminRoute.get('/checkAuth',driverAuthMiddleware,driverController.checkAuth)
+adminRoute.post('/logout',driverController.logout)
+adminRoute.get('/driverdetials/:id',driverController.getdriverdetials)
 export default adminRoute
