@@ -7,10 +7,10 @@ class driverDeatials {
     }
 
     async execute(driverId){
-        console.log('helo');
+       
         
         const driver= await this.driverRepository.findById(driverId)
-        console.log('name',driver);
+       
         
         return driver
     }

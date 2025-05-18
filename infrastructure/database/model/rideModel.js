@@ -12,14 +12,30 @@ const rideSchema=new mongoose.Schema({
         ref:'Driver',
         required:true
     },
-    pickup:{
-        type:String,
-        required:true
-    },
-    drop:{
-        type:String,
-        required:true
-    },
+    pickup: {
+    type: String,
+    required: true
+  },
+  pickupLat: {
+    type: Number, // Add this
+    required: true
+  },
+  pickupLng: {
+    type: Number, // Add this
+    required: true
+  },
+  drop: {
+    type: String,
+    required: true
+  },
+  dropLat: {
+    type: Number, // Add this
+    required: true
+  },
+  dropLng: {
+    type: Number, // Add this
+    required: true
+  },
     fare:{
         type:Number,
         required:true
@@ -40,6 +56,11 @@ const rideSchema=new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      rideId:{
+       type:String,
+       required:true,
+       unique:true
+      },
       review: {
         type: String,
         trim: true,
@@ -56,3 +77,9 @@ const rideSchema=new mongoose.Schema({
 
 const Ride=mongoose.model('Ride',rideSchema)
 export default Ride
+
+
+
+
+
+

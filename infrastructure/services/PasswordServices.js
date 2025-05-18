@@ -20,7 +20,7 @@ class passwordServices{
 
     async comparePassword(password,oldpass){
         try {
-            console.log("passbctr");
+            
             const isPasswordValid = await bcrypt.compare(password, oldpass);
             return isPasswordValid
         } catch (error) {

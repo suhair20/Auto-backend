@@ -4,7 +4,7 @@ import DriverRepository from "../../repository/implementation/DriverRepository.j
 
 const updateDriverLocationUseCase= new UpdateDriverLocationUseCase(new DriverRepository())
 
-const activeDrivers={}
+export const activeDrivers={}
 const driverSocketMap={} 
 const rideIdToUserSocketMap={}
 export function setupDriverSocket(io){
@@ -14,23 +14,68 @@ export function setupDriverSocket(io){
         console.log('driverconnected',socket.id)
 
          socket.on('driverLocation',async(data)=>{
+          console.log('📩 Received driverLocation:', data);
             const {driverId,latitude,longitude,drivername}=data
             
             driverSocketMap[driverId]=socket.id;
            
             
         const updatedlocation=await updateDriverLocationUseCase.execute(driverId,latitude,longitude,)
-
+        console.log("acttive  ");
+        
 
         activeDrivers[driverId]={
           ...updatedlocation,
           drivername
         }
-
-        io.emit('updateDrivers',activeDrivers)
+  io.emit('updateDrivers',activeDrivers)
 
 
          })
+
+
+socket.on('driverLocationForTracking', async (data) => {
+  console.log('📡 Received driver location for tracking:', data);
+  const { driverId, latitude, longitude, drivername } = data;
+
+  driverSocketMap[driverId] = socket.id;
+
+  const updatedlocation = await updateDriverLocationUseCase.execute(driverId, latitude, longitude);
+
+  activeDrivers[driverId] = {
+     ...activeDrivers[driverId],
+    ...updatedlocation,
+    drivername
+  };
+
+     const rideId = activeDrivers[driverId]?.rideId;
+  console.log("🔍 Driver ID:", driverId);
+  console.log("🔍 Ride ID:", rideId);
+
+  const userSocketId = rideIdToUserSocketMap[rideId];
+
+  if (userSocketId) {
+    console.log("✅ Sending location update to user:", userSocketId,driverId,latitude,longitude,drivername);
+
+    io.to(userSocketId).emit('driverLocationUpdate', {
+      driverId,
+      latitude,
+      longitude,
+      drivername
+    });
+  } else {
+    console.log("❌ No user socket found for ride ID:", rideId);
+  }
+});
+
+
+
+           socket.on('userTrackingRide', ({ rideId }) => {
+    console.log(`User tracking started for rideId: ${rideId}`);
+    rideIdToUserSocketMap[rideId] = socket.id;
+       console.log('✅ Mapped rideId to user socket:', rideId, socket.id);
+  });
+
 
          socket.on('sent_ride_req',(data)=>{
            const {driverId,rideDetails}=data
@@ -58,6 +103,21 @@ export function setupDriverSocket(io){
               rideId,
               status
             })
+
+
+            if (status === 'Accepted') {
+              console.log("✅ Ride accepted. Adding rideId to activeDrivers");
+              
+      activeDrivers[driverId] = {
+        ...activeDrivers[driverId],
+        rideId
+      };
+
+       console.log("🧾 Updated activeDrivers[driverId]:", activeDrivers[driverId]);
+    }
+
+
+
           }
          })
 
@@ -85,6 +145,13 @@ export function setupDriverSocket(io){
 
       socket.on('disconnect', () => {
         console.log('Driver disconnected:', socket.id);
+
+          for (const rideId in rideIdToUserSocketMap) {
+      if (rideIdToUserSocketMap[rideId] === socket.id) {
+        delete rideIdToUserSocketMap[rideId];
+        console.log(`🧹 Removed stale user socket for rideId: ${rideId}`);
+      }
+    }
 
         for (const [driverId, id] of Object.entries(driverSocketMap)) {
           if (id === socket.id) {

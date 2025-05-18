@@ -9,6 +9,8 @@ import Resendotp from '../../useCases/userCases/Resendotp.js'
 import LoginUser from '../../useCases/userCases/LoginUser.js'
 import { trusted } from 'mongoose'
 import Razorpay from 'razorpay'
+import RideRepository from '../../repository/implementation/rideRepository.js'
+
 
 
 const razorpay = new Razorpay({
@@ -23,7 +25,8 @@ class UserController {
                    otpService = new OtpService(),
                    otpverifying=new Otpverifying(),
                     resendotp=new Resendotp(),
-                     loginuser=new LoginUser()  
+                     loginuser=new LoginUser(),  
+                    riderepository=new RideRepository()
                     
      ) {
                 this.userRepository = userRepository;
@@ -33,6 +36,8 @@ class UserController {
                    this.otpverifying=otpverifying
                    this.resendotp=resendotp
                    this.loginuser=loginuser
+                   this.riderepository=riderepository
+                
                  
        }
 
@@ -94,7 +99,7 @@ class UserController {
     try {
         const {email,password}=req.body
         const {Token,User} =await this.loginuser.excute(email,password)
-        console.log(Token);
+       
         res.clearCookie("driverToken", { path: "/driver" });
         res.cookie('token',Token,{
             httpOnly:true,
@@ -112,9 +117,9 @@ class UserController {
 
  checkAuth=async(req,res)=>{
     try {
-         console.log(" authhhhhhh:: ",req.user);
+        
          
-        console.log('Auth sucess')
+       
         res.json({success:true,user:req.user})
     } catch (error) {
         
@@ -133,9 +138,9 @@ class UserController {
  createOrder=async(req,res)=>{
     try {
 
-        console.log("creteordeback");
+        
         const { amount } = req.body;
-   console.log(amount);
+  
    
         if (!amount) {
           return res.status(400).json({ error: 'Amount is required' });
@@ -148,7 +153,7 @@ class UserController {
       currency: 'INR',
       receipt: 'receipt_' + Math.random().toString(36).slice(2),
     });
-console.log("order",order);
+
 
     res.json(order);
 
@@ -159,14 +164,27 @@ console.log("order",order);
     }
  }
 
-
- verifypayment=async(req,res)=>{
+ getridehistory=async(req,res)=>{
     try {
+     console.log(req.user);
+     
+        const userId=req.user._id
+       
         
+        if(!userId){
+            res.status(500).json({error:'not have useId'})
+        }
+        const rideHistory=await this.riderepository.findByUserId(userId)
+         res.status(200).json(rideHistory);
+
+
     } catch (error) {
-        res.status(500).json({error:'failed in verifypayment  '})
+        console.log(error);
+        
     }
  }
+
+
 
 
 

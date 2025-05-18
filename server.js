@@ -14,7 +14,7 @@ import connectDB from './infrastructure/database/mongoConfig/mongoConnect.js';
 import errorHandler from './infrastructure/express/Middelware/errorHandler.js';
 import { setupDriverSocket } from './inerfaceAdapters/controllers/driverSocketController.js';
 
-
+import { activeDrivers } from './inerfaceAdapters/controllers/driverSocketController.js';
 
 
 dotenv.config()
@@ -59,6 +59,12 @@ app.get('/', (req, res) => {
 app.use('/user',userRoute)
 app.use('/admin',adminRoute)
 app.use('/driver',driverRoute)
+
+
+app.get('/api/active-drivers', (req, res) => {
+  console.log('Active Drivers:', activeDrivers);
+  res.json({ drivers: activeDrivers });
+});
 
 
 // Use the error-handling middleware

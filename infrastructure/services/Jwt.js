@@ -15,8 +15,6 @@ class Jwt{
 
     verifyToken(token){
         try {
-         console.log("tioken",token);
-         
             return jwt.verify(token,this.secret)
             
         } catch (error) {

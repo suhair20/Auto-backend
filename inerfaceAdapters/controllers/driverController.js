@@ -130,9 +130,6 @@ class DriverController{
 
     checkAuth=async(req,res)=>{
         try {
-            console.log(" driverAuth:: ",req.driver);
-            
-           console.log('Auth driversucess')
            res.json({success:true,driver:req.driver})
        } catch (error) {
            console.log(error);
@@ -152,12 +149,12 @@ class DriverController{
      getdriverdetials=async(req,res)=>{
         try {
         const driverId=req.params.id
-        console.log("id",driverId);
+       
         
        const driver= await this.DriverDeatials.execute(driverId)
-       console.log(driver);
        
-       res.status(201).json(driver);
+       
+       res.status(201).json(driver);    
             
         } catch (error) {
             return res.status(500).json({ success: false, message: " failed" });
