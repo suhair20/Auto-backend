@@ -32,8 +32,18 @@ class  RideRepository extends RideInterface{
       }
     
       async updateStatus(rideId, status) {
-        return await Ride.findByIdAndUpdate(rideId, { status }, { new: true });
+        console.log("ride id come 3 sucess");
+        return await Ride.findOneAndUpdate({ rideId }, { status }, { new: true });
       }
+
+      async updateStatusandpaymentId(rideId, status, razorpayPaymentId) {
+  console.log("ride id come 4uccess");
+  return await Ride.findOneAndUpdate(
+    { rideId }, 
+    { status, razorpayPaymentId }, 
+    { new: true } 
+  );
+}
     
       async addReview(rideId, review, rating) {
         return await Ride.findByIdAndUpdate(

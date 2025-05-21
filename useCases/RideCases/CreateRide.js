@@ -19,7 +19,8 @@ class CreateRide {
            dropLng: rideData.destination.coordinates[0],
             fare:rideData.fare,
             advancePaid:rideData.advancePayment,
-            razorpayPaymentId:razorpayPaymentId,
+            advancePaymentId:razorpayPaymentId,
+            status:'confirmed',
              rideId:rideData.rideId
         }
         

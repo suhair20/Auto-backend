@@ -44,12 +44,15 @@ const rideSchema=new mongoose.Schema({
         type:Number,
         default:0,
     },
+    advancePaymentId:{
+      type: String,
+    },
     razorpayPaymentId: {
         type: String,
       },
       status: {
         type: String,
-        enum: ['pending', 'confirmed', 'completed', 'cancelled'],
+        enum: ['pending','payment_pending', 'confirmed', 'completed', 'cancelled'],
         default: 'pending',
       },
       createdAt: {

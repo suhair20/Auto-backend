@@ -14,7 +14,7 @@ export function setupDriverSocket(io){
         console.log('driverconnected',socket.id)
 
          socket.on('driverLocation',async(data)=>{
-          console.log('📩 Received driverLocation:', data);
+         
             const {driverId,latitude,longitude,drivername}=data
             
             driverSocketMap[driverId]=socket.id;
@@ -25,6 +25,7 @@ export function setupDriverSocket(io){
         
 
         activeDrivers[driverId]={
+          ...activeDrivers[driverId],
           ...updatedlocation,
           drivername
         }
@@ -35,27 +36,27 @@ export function setupDriverSocket(io){
 
 
 socket.on('driverLocationForTracking', async (data) => {
-  console.log('📡 Received driver location for tracking:', data);
+ 
   const { driverId, latitude, longitude, drivername } = data;
 
   driverSocketMap[driverId] = socket.id;
 
   const updatedlocation = await updateDriverLocationUseCase.execute(driverId, latitude, longitude);
-
+const rideId = activeDrivers[driverId]?.rideId;
   activeDrivers[driverId] = {
      ...activeDrivers[driverId],
     ...updatedlocation,
-    drivername
+    drivername,
+    ...(rideId && { rideId })  
   };
 
-     const rideId = activeDrivers[driverId]?.rideId;
-  console.log("🔍 Driver ID:", driverId);
-  console.log("🔍 Ride ID:", rideId);
+     
+  
 
   const userSocketId = rideIdToUserSocketMap[rideId];
 
   if (userSocketId) {
-    console.log("✅ Sending location update to user:", userSocketId,driverId,latitude,longitude,drivername);
+    
 
     io.to(userSocketId).emit('driverLocationUpdate', {
       driverId,

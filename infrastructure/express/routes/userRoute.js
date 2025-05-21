@@ -31,5 +31,6 @@ const userRoute = express.Router();
     userRoute.post('/verifypayment',rideController.ride)
 userRoute.get('/ridehistory',userAuthMiddleware,userController.getridehistory)
 userRoute.get('/trackingdeatials',rideController.tracking)
-
+userRoute.post('/finalverifypayment',rideController.ridepayment)
+userRoute.post ('/feedback',rideController.feedback)
 export default userRoute;
