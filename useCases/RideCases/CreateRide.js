@@ -1,4 +1,4 @@
-import RideRepository from "../../repository/implementation/rideRepository.js";
+import RideRepository from "../../repository/implementation/RideRepository.js";
 
 class CreateRide {
     constructor(rideRepository=new RideRepository) {

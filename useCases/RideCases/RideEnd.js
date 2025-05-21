@@ -1,5 +1,5 @@
 
-import RideRepository from "../../repository/implementation/rideRepository.js";
+import RideRepository from "../../repository/implementation/RideRepository.js";
 
 class RideEnd{
        constructor(rideRepository=new RideRepository) {
@@ -28,7 +28,7 @@ class RideEnd{
        }
 
        async executefeedback(rideId,comment,rating){
-        
+
          if (!rideId || !rating) {
     return res.status(400).json({ success: false, message: "Missing data" });
   }
