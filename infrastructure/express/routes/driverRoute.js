@@ -21,4 +21,5 @@ adminRoute.get('/checkAuth',driverAuthMiddleware,driverController.checkAuth)
 adminRoute.post('/logout',driverController.logout)
 adminRoute.get('/driverdetials/:id',driverController.getdriverdetials)
 adminRoute.post('/rideEnd',rideController.rideEnd)
+adminRoute.get('/driverhistory/:id',driverController.driverhistory)
 export default adminRoute

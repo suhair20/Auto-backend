@@ -5,8 +5,9 @@ import Resendotp from "../../useCases/Drivercase/Resendotp.js";
 import Verification from "../../useCases/Drivercase/Verification.js";
 import LoginDriver from "../../useCases/Drivercase/LoginDriver.js";
 import driverDeatials from "../../useCases/Drivercase/driverDeatials.js";
-
+import RideDeatials from "../../useCases/Drivercase/RideDeatials.js";
 import { log } from "console";
+import Ride from "../../infrastructure/database/model/rideModel.js";
 
 
 
@@ -17,7 +18,8 @@ class DriverController{
     resendotp=new Resendotp(),
     verification = new Verification(),
     loginDriver=new LoginDriver(),
-    DriverDeatials= new driverDeatials 
+    DriverDeatials= new driverDeatials(),
+    rideDeatials=new RideDeatials()
     
 ){
        this.signupDriver=signupDriver
@@ -27,6 +29,7 @@ class DriverController{
        this.Verification = verification
        this.loginDriver=loginDriver
        this.DriverDeatials=DriverDeatials
+       this.RideDeatials=rideDeatials
       
     }
 
@@ -155,6 +158,24 @@ class DriverController{
        
        
        res.status(201).json(driver);    
+            
+        } catch (error) {
+            return res.status(500).json({ success: false, message: " failed" });
+        }
+     }
+
+     driverhistory=async(req,res)=>{
+
+        console.log("iidd jj");
+        
+        const driverId=req.params.id
+        console.log('ggoii',driverId);
+
+        try {
+            if(driverId){
+               const data=await this.RideDeatials.execute(driverId)
+               res.status(201).json(data); 
+            }
             
         } catch (error) {
             return res.status(500).json({ success: false, message: " failed" });

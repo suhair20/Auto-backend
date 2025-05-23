@@ -2,7 +2,7 @@
 import RideRepository from "../../repository/implementation/RideRepository.js";
 
 class RideEnd{
-       constructor(rideRepository=new RideRepository) {
+       constructor(rideRepository=new RideRepository()) {
       this.rideRepository = rideRepository;
        }
 

@@ -35,6 +35,28 @@ export function setupDriverSocket(io){
          })
 
 
+socket.on('advancePaymentDone', ({ driverId, rideId }) => {
+  
+  
+  const driverSocketId = driverSocketMap[driverId];
+
+  if (driverSocketId) {
+    io.to(driverSocketId).emit('userAdvancePaid', {
+      rideId,
+      message: 'User has made an advance payment.',
+    });
+    console.log(`📨 Notified driver ${driverId} of advance payment for ride ${rideId}`);
+  } else {
+    console.log(`❌ Driver ${driverId} is not connected`);
+  }
+});
+
+
+
+
+
+
+
 socket.on('driverLocationForTracking', async (data) => {
  
   const { driverId, latitude, longitude, drivername } = data;
