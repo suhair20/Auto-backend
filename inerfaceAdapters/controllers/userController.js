@@ -9,7 +9,7 @@ import Resendotp from '../../useCases/userCases/Resendotp.js'
 import LoginUser from '../../useCases/userCases/LoginUser.js'
 import { trusted } from 'mongoose'
 import Razorpay from 'razorpay'
-import RideRepository from '../../repository/implementation/rideRepository.js'
+import RideRepository from '../../repository/implementation/RideRepository.js'
 
 
 
