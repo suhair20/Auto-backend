@@ -7,11 +7,11 @@ import { log } from 'console';
 class OTP {
     constructor() {
         this.redisClient = new Redis({
-            url: 'https://eminent-wahoo-31585.upstash.io',
-            token:'AXthAAIjcDFiYTcwNjRmMzU3YzQ0Njg5OTZhYzAyYzIxMzgyYWY4N3AxMA',// Replace with your Upstash token
+            url: "https://stirring-dory-25781.upstash.io",
+            token:"AWS1AAIncDIyMGM0NzExY2Y2ZjQ0ZDQxYTg2Y2QzODg1MDk4NDgwYnAyMjU3ODE",
         });
         
-       
+      
     }
 
     generateOtp() {
@@ -37,7 +37,7 @@ class OTP {
                 service: 'gmail',
                 auth: {
                     user: 'moidheensuhair@gmail.com',
-                    pass: 'sbwa aclw cgyg lczb',
+                    pass: 'brwh ikwy lnya ikwm'
                 },
             });
 

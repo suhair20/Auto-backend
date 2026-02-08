@@ -19,6 +19,8 @@ import Jwt from '../../infrastructure/services/Jwt.js'
           const isPasswordValid=await this.passwordServices.comparePassword(password,User.password)
           if (isPasswordValid){
             const Token=await this.jwtToken.genrateToken({id:User.id,email:User.email});
+            console.log(Token,User);
+            
             return {Token,User}
           }else{
             throw new Error('Invalid password')

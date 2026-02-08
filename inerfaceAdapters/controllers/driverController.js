@@ -121,7 +121,7 @@ class DriverController{
             sameSite:'strict',
             maxAge: 24 * 60 * 60 * 1000, 
         })
-        res.status(201).json({ success: true, User });
+        res.status(201).json({ success: true, User });  
     } catch (error) {
             console.log(error);
             res.status(400).json({ success: false, message: error.message })
