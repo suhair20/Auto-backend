@@ -27,7 +27,7 @@ const server=createServer(app)
 
 const io=new Server(server,{
 cors:{
-  origin:'auto-bay.vercel.app',
+  origin:'https://auto-bay.vercel.app',
   methods:['GET','POST'],
   credentials:true
 }
@@ -36,7 +36,7 @@ cors:{
 setupDriverSocket(io);
 
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://auto-bay.vercel.app', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }))  
