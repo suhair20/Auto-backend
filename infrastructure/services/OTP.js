@@ -1,9 +1,11 @@
 import { createClient } from 'redis';
 import { Redis } from '@upstash/redis';
-import nodemailer from 'nodemailer';
+import { Resend } from "resend";
 import crypto from 'crypto';
 import { log } from 'console';
 
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 class OTP {
     constructor() {
         this.redisClient = new Redis({
@@ -17,46 +19,41 @@ class OTP {
     generateOtp() {
         return crypto.randomInt(100000, 999999).toString();
     }
+    
 
     async sendOtp(email) {
-        try {
-            console.log('heloo');
-            
-            const otp = this.generateOtp();
-           console.log('oyy')
-            
+  try {
+    console.log("Generating OTP");
 
-            // Store OTP in Redis with an expiration time of 60 seconds
-            console.log("redi");
-            
-            await this.redisClient.set(`otp:${email}`, otp, { ex: 60 });
-            console.log('redis okey');
-            
+    const otp = this.generateOtp();
 
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'moidheensuhair@gmail.com',
-                    pass: 'brwh ikwy lnya ikwm'
-                },
-            });
+    // Store OTP in Redis (60 seconds)
+    await this.redisClient.set(`otp:${email}`, otp, { ex: 60 });
+    console.log("OTP stored in Redis");
 
-            const mailOptions = {
-                from: 'moidheensuhair@gmail.com',
-                to: email,
-                subject: 'Your OTP',
-                text: `Your OTP code is ${otp}`,
-            };
-            console.log(mailOptions);
-            
+    // Send email via Resend
+    await resend.emails.send({
+      from: "PhoneFix <onboarding@resend.dev>",
+      to: email,
+      subject: "Your OTP Code",
+      html: `
+        <div style="font-family: Arial, sans-serif">
+          <h2>OTP Verification</h2>
+          <p>Your OTP code is:</p>
+          <h1>${otp}</h1>
+          <p>This code is valid for 1 minute.</p>
+        </div>
+      `,
+    });
 
-           return await transporter.sendMail(mailOptions);
-        } catch (error) {
-            console.error("Error sending OTP:", error);
-            throw new Error("Failed to send OTP. Please try again later.");
-        }
-    }
+    console.log("OTP email sent successfully");
+    return true;
 
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    throw new Error("Failed to send OTP. Please try again later.");
+  }
+}
     async verifyOtp(email, otp) {
         try {
             const storedOtp = await this.redisClient.get(`otp:${email}`);
