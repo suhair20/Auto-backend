@@ -43,6 +43,8 @@ class UserController {
 
     signup = async (req, res,next) => {
         try {
+            console.log("heloo");
+            
             const { name, password,email } = req.body;
            
             const user = await this.signupUser.execute(name,password,email)

@@ -34,12 +34,18 @@ cors:{
 })
 
 setupDriverSocket(io);
-
+`1q2  `
 app.use(cors({
     origin: 'https://auto-bay.vercel.app', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }))  
+
+// app.use(cors({
+//     origin: 'https://auto-bay.vercel.app', 
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true,
+// }))  
 
 // app.use(cors({
 //     origin: 'https://auto-frontend-8idj-moidheen-suhairs-projects.vercel.app', 
